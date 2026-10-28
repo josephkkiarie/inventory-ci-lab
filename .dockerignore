@@ -1,0 +1,17 @@
+.git
+.venv
+.pytest_cache
+__pycache__
+reports
+*.pyc
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+requirements-dev.txt
+tests/
+docs/
+evidence/
