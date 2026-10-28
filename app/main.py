@@ -14,7 +14,7 @@ def index():
 
 @app.get('/health')
 def health():
-    return jsonify(status='broken'), 200
+    return jsonify(status='ok'), 200
 
 @app.get('/api/items')
 def items():
