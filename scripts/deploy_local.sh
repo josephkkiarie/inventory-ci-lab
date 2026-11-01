@@ -19,7 +19,7 @@ rollback() {
                 docker rename "$backup" "$live" || true
             fi
             docker start "$live" >/dev/null 2>&1 || true
-            for attempt in $(seq 1 20); do
+            for _ in $(seq 1 20); do
                 if curl -fsS http://127.0.0.1:5050/health >/dev/null 2>&1; then
                     echo "Previous container restored and healthy" >&2
                     break
@@ -49,7 +49,7 @@ docker run -d --restart unless-stopped --name "$live" \
     -p 127.0.0.1:5050:5000 "$image_tag" >/dev/null
 
 ready=0
-for attempt in $(seq 1 20); do
+for _ in $(seq 1 20); do
     if curl -fsS http://127.0.0.1:5050/health 2>/dev/null | grep -q '"status":"ok"'; then
         ready=1
         break

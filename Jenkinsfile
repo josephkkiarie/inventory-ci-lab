@@ -14,15 +14,12 @@ pipeline {
       steps {
         sh '''
           set -eu
-          python3 -m venv .venv
-          .venv/bin/pip install -r requirements-dev.txt
-          mkdir -p reports
-          .venv/bin/python -m pytest -v --junitxml=reports/pytest.xml
+          bash tests/test_api.sh
         '''
       }
     }
     stage('Static check') {
-      steps { sh '.venv/bin/ruff check app tests' }
+      steps { sh 'bash -n app/*.sh tests/*.sh && sh -n scripts/*.sh && shellcheck app/*.sh tests/*.sh scripts/*.sh' }
     }
     stage('Build image') {
       steps {
@@ -57,7 +54,7 @@ pipeline {
   post {
     always {
       sh 'docker rm -f inventory-candidate >/dev/null 2>&1 || true'
-      junit allowEmptyResults: true, testResults: 'reports/pytest.xml'
+      junit allowEmptyResults: true, testResults: 'reports/test-results.xml'
       archiveArtifacts artifacts: 'reports/*.xml', allowEmptyArchive: true
     }
   }

@@ -1,9 +1,5 @@
 .git
-.venv
-.pytest_cache
-__pycache__
 reports
-*.pyc
 .env
 .env.*
 *.pem
@@ -11,7 +7,9 @@ reports
 *.p12
 *.pfx
 secrets/
-requirements-dev.txt
 tests/
+scripts/
 docs/
 evidence/
+README.md
+Jenkinsfile

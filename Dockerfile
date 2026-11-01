@@ -1,9 +1,13 @@
-FROM python:3.12-slim
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+FROM alpine:3.21
+
+RUN apk add --no-cache bash socat \
+    && addgroup -S -g 10001 appgroup \
+    && adduser -S -D -H -u 10001 -G appgroup appuser
+
 WORKDIR /service
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt && useradd -r -u 10001 appuser
-COPY app ./app
+COPY app/ /service/app/
+RUN chmod 0555 /service/app/server.sh /service/app/router.sh
+
 USER appuser
 EXPOSE 5000
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "app.main:app"]
+CMD ["socat", "-T", "10", "TCP-LISTEN:5000,bind=0.0.0.0,reuseaddr,fork", "EXEC:/service/app/server.sh"]
