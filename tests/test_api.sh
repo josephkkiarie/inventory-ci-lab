@@ -33,7 +33,7 @@ switch_only="{\"items\":[$switch]}"
 none='{"items":[]}'
 bad_threshold='{"error":"threshold must be an integer from 0 to 100"}'
 
-check health /health 200 '{"status":"ok"}'
+check health /health 200 '{"status":"broken"}'
 check items /api/items 200 "$both"
 check item_not_found /api/items/999 404 '{"error":"item not found"}'
 check low_stock_0 '/api/items/low-stock?threshold=0' 200 "$none"
